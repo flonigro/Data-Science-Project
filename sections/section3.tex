@@ -1,0 +1,48 @@
+\section{Exercise 3}
+\label{sec:sec3}
+A researcher considers the (nonlinear) regression model:
+
+$$
+y_{i}=h\left(x_{i}^{*}, \beta_{0}\right)+\varepsilon_{i},
+$$
+
+where $\beta_{0}$ is a scalar parameter and $h$ is a given function (specified below). The explanatory variable is observed with a measurement error:
+
+$$
+x_{i}=x_{i}^{*}+u_{i}
+$$
+
+The available data for the researcher are $\left(y_{i}, x_{i}\right), i=1, \cdots, n$. Moreover, we assume:
+
+$$
+\left(x_{i}^{*}, \varepsilon_{i}, u_{i}\right)^{\prime} \sim \operatorname{IIN}\left[\left(\begin{array}{l}
+0 \\
+0 \\
+0
+\end{array}\right),\left(\begin{array}{ccc}
+\sigma_{x^{*}}^{2} & 0 & 0 \\
+0 & \sigma_{\epsilon}^{2} & 0 \\
+0 & 0 & \sigma_{u}^{2}
+\end{array}\right)\right]
+$$
+
+\textbf{Misspecified estimation}
+Suppose first that the researcher neglects the measurement errors. We want to study the consequences of this choice. To simplify, let us assume in this part of the exercise that $h\left(x_{i}^{*}, \beta_{0}\right)=x_{i}^{*} \beta_{0}$, that is, the regression model is linear. The researcher proposes the estimator:
+
+$$
+\hat{\beta}=\arg \min _{\beta} \sum_{i=1}^{n}\left(y_{i}-x_{i} \beta\right)^{2}
+$$
+
+\begin{itemize}
+  \item Compute:
+\end{itemize}
+
+$$
+\beta_{0}^{*}=\arg \min _{\beta} E_{0}\left[\left(y_{i}-x_{i} \beta\right)^{2}\right]
+$$
+
+where $E_{0}[\cdot]$ denotes expectation w.r.t. the true distribution of the data. Is the estimator $\hat{\beta}$ consistent for $\beta_{0}$ ?
+
+\begin{itemize}
+  \item Derive the asymptotic distribution of the M-estimator $\hat{\beta}$.
+\end{itemize}

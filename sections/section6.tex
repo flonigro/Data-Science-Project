@@ -1,0 +1,70 @@
+\section{Exercise 6}
+\label{sec:sec6}
+The aim of this project is to implement the so-called "wild bootstrap" procedure to assess the uncertainty of OLS estimates of a linear model, and compare it with the uncertainty assessments of "paired bootstrap" and "residual bootstrap" procedures. Data containing information on medical expenses (E), standardized income (I) and smoking habit (S, taking value 1 for a smoker and 0 for a non smoker) can be found in the file "medical.csv" located in the exam folder. Create and precisely document a Python code performing in sequence the following tasks:
+
+\begin{enumerate}
+  \item Read the csv file into your Python code. Obtain basic informations on the data types of each variable, the number of observations, the number of missing values.\\
+(Hint: functions from the Pandas library can ease this task.)
+  \item Compute summary statistics of each variable, visualize their correlation matrix and plot their histogram and pairwise scatter plots.
+  \item Create a function computing the OLS estimates, $R^{2}$ and residuals of linear regression model
+\end{enumerate}
+
+
+\begin{equation}
+E_{i}=a+b I_{i}+c S_{i}+\varepsilon_{i}, \quad i=1, \ldots, n \label{eq:Ei}
+\end{equation}
+
+
+and obtain these estimates.\\
+4. Produce the pairwise scatter plots of the residuals versus the explanatory variables. What do you notice?\\
+(Hint: do you notice any heteroskedasticity with respect to a specific explanatory variable?)\\
+5. Define three functions computing the bootstrap estimates of the model coefficients and $R^{2}$ for the paired bootstrap, the residual bootstrap and the wild bootstrap procedures according to the algorithms reported below. ${ }^{1}$\\
+6. Compute the bootstrap estimates of the coefficients and the $R^{2}$ of model (4) for these three bootstrap schemes. Visualize and compare the histograms of the bootstrap distributions of the coefficients and the $R^{2}$. What do you notice?\\
+(Hint: The histograms of the wild bootstrap distributions resemble the ones of the paired bootstrap or the ones of the residual bootstrap?)\\
+7. Compute and visualize the confidence intervals for the model coefficients $a, b$ and $c$ based on the three bootstrap schemes. Which one/ones would you trust and why?
+
+\begin{lstlisting}
+Algorithm 1 Paired bootstrap
+    set the random number generation seed and B (the number of bootstrap samples)
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\left(E_{i}^{*}, I_{i}^{*}, S_{i}^{*}\right)\right\}$ of size $n$ drawing with replacement from $\left\{\left(E_{i}, I_{i}, S_{i}\right)\right\}$
+        compute the OLS estimates of the model coefficients and the $R^{2}$ for this bootstrap sample
+    end for
+    return all bootstrap coefficients and $R^{2}$ estimates
+\end{lstlisting}
+
+\begin{lstlisting}
+Algorithm 2 Residual bootstrap
+    set the random number generation seed and B
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\hat{\varepsilon}_{i}^{*}\right\}$ of size $n$ drawing with replacement from $\left\{\hat{\varepsilon}_{i}\right\}$, the estimated residuals
+        compute the OLS estimates of the coefficients and the $R^{2}$ for the model
+            $E_{i}^{*}=a+b I_{i}+c S_{i}+\hat{\varepsilon}_{i}^{*}, \quad i=1, \ldots, n$
+    end for
+    return all bootstrap coefficients and $R^{2}$ estimates
+\end{lstlisting}
+
+\footnotetext{${ }^{1}$ The residual bootstrap assumes that $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]=a+b I_{i}+c S_{i}$ and that the error terms $\varepsilon_{i}$ are IID and homoskedastic. The paired bootstrap only assumes that there exists a joint probability distribution of $\left\{\left(E_{i}, I_{i}, S_{i}\right)\right\}$ and it makes no assumptions about the properties of the error terms $\varepsilon_{i}$ or about the functional form of $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]$. The wild bootstrap lies in between these two bootstrap schemes, as it assumes that $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]=a+b I_{i}+c S_{i}$, but it allows for heteroskedasticity by conditioning on the (transformed) residuals.
+}\begin{lstlisting}
+Algorithm 3 Wild bootstrap
+    set the random number generation seed and $B$
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\hat{\varepsilon}_{i}^{*}\right\}$ of size $n$ where $\hat{\varepsilon}_{i}^{*}=f\left(\hat{\varepsilon}_{i}\right) v_{i}$ with
+$$
+f\left(\hat{\varepsilon}_{i}\right)=\sqrt{n /(n-K)} \hat{\varepsilon}_{i},
+$$
+\end{lstlisting}
+
+$K$ being the number of coefficients, and
+
+$$
+v_{i}= \begin{cases}1 & \text { with probability } 1 / 2 \\ -1 & \text { with probability } 1 / 2\end{cases}
+$$
+
+4: compute the OLS estimates of the coefficients and the $R^{2}$ for the model
+
+$$
+E_{i}^{*}=a+b I_{i}+c S_{i}+\hat{\varepsilon}_{i}^{*}, \quad i=1, \ldots, n
+$$
+
+return all bootstrap coefficients and $R^{2}$ estimates.

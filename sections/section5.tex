@@ -1,0 +1,58 @@
+\section{Exercise 5}
+\label{sec:sec5}
+The aim of this project is to estimate the variance-covariance matrix of the OLSE of the parameters in linear regression by the jackknife method. Let's assume the linear model
+
+$$
+y_{i}=\mathbf{x}_{i}^{\prime} \boldsymbol{\beta}+\epsilon_{i}, \quad i=1, \ldots, n
+$$
+
+where $\boldsymbol{\beta}=\left(\beta_{1}, \ldots, \beta_{p}\right)^{\prime}, \mathbf{x}_{i}^{\prime}=\left(x_{i 1}, \ldots, x_{i p}\right)$ and $\epsilon_{i}$ are independent identically distributed random variables with some distribution $F$ such that $E\left(\epsilon_{i}\right)=0$. In matrix notation the model can be written as
+
+$$
+\begin{aligned}
+\mathbf{y} & =\mathbf{X} \boldsymbol{\beta}+\boldsymbol{\epsilon}, \\
+\text { where } \quad \mathbf{y} & =\left(y_{1}, \ldots, y_{n}\right)^{\prime}, \\
+\boldsymbol{\epsilon} & =\left(\epsilon_{1}, \ldots, \epsilon_{n}\right)^{\prime}, \\
+\mathbf{X} & =\left(\begin{array}{c}
+\mathbf{x}_{1}^{\prime} \\
+\vdots \\
+\mathbf{x}_{n}^{\prime}
+\end{array}\right) \in \mathbb{R}^{n \times p} .
+\end{aligned}
+$$
+
+Let $\hat{\boldsymbol{\beta}}$ be the OLSE of $\boldsymbol{\beta}$ and let $\hat{\epsilon}_{i}=y_{i}-\mathbf{x}_{i}^{\prime} \hat{\boldsymbol{\beta}}$ be the $i$ th residual.
+
+\begin{enumerate}
+  \item Show that
+\end{enumerate}
+
+$$
+\hat{\boldsymbol{\beta}}_{(i)}=\hat{\boldsymbol{\beta}}-\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i} \hat{\epsilon}_{i}^{m}
+$$
+
+using the equalities
+
+$$
+\begin{aligned}
+\mathbf{X}_{(i)}^{\prime} \mathbf{y}_{(i)} & =\mathbf{X}^{\prime} \mathbf{y}-\mathbf{x}_{i} y_{i} \\
+\left(\mathbf{X}_{(i)}^{\prime} \mathbf{X}_{(i)}\right)^{-1} & =\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}+\frac{\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i} \mathbf{x}_{i}^{\prime}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}}{1-m_{i i}}
+\end{aligned}
+$$
+
+where $m_{i i}=\mathbf{x}_{i}^{\prime}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i}$ is the $i t h$ diagonal element of the projection matrix $\mathbf{M}=\mathbf{X}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{X}^{\prime}$ and $\hat{\epsilon}_{i}^{m}=\frac{\hat{\epsilon}_{i}}{1-m_{i i}}$.\\
+2. Give the interpretation of the difference $\hat{\boldsymbol{\beta}}_{(i)}-\hat{\boldsymbol{\beta}}$.\\
+3. Show that the jackknife estimator of the variance-covariance matrix of (the random vector) $\hat{\boldsymbol{\beta}}$ is given by
+
+$$
+\begin{aligned}
+\hat{V}_{J a c k}(\hat{\boldsymbol{\beta}}) & =\frac{1}{n(n-1)} \sum_{i=1}^{n}\left(\hat{\boldsymbol{\beta}}^{* i}-\hat{\boldsymbol{\beta}}^{* \cdot}\right)\left(\hat{\boldsymbol{\beta}}^{* i}-\hat{\boldsymbol{\beta}}^{* \cdot}\right)^{\prime} \\
+& =\frac{n-1}{n}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}\left[\sum_{i=1}^{n} \mathbf{x}_{i} \mathbf{x}_{i}^{\prime}\left(\hat{\epsilon}_{i}^{m}\right)^{2}-\frac{1}{n}\left(\sum_{i=1}^{n} \mathbf{x}_{i} \hat{\epsilon}_{i}^{m}\right)\left(\sum_{i=1}^{n} \mathbf{x}_{i}^{\prime} \hat{\epsilon}_{i}^{m}\right)\right]\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}
+\end{aligned}
+$$
+
+where the $\hat{\boldsymbol{\beta}}^{* i}$ are the pseudo-values and $\hat{\boldsymbol{\beta}}^{*}$ their mean.\\
+4. Consider an approximation of the jackknife estimator obtained at point 3 . by replacing $1-m_{i i}$ by 1 . When is this approximation justified? (Compute the average value of the $m_{i i}$, i.e. $\frac{1}{n} \sum_{i=1}^{n} m_{i i}$.)\\
+5. Give the formula of jackknife estimator of point 3. obtained by replacing $1-m_{i i}$ by 1 and verify that this estimator is the estimator proposed by H. White (1980), A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity, Econometrica, pp. 817-838. Give the exact location in that paper where we find this estimator.\\
+6. Read p. 817,820 (first half), and p. 821 (first half) of the cited article and summarize in at most one page the problem and the proposed solution.\\
+7. Compare the jacknife estimator derived at point 3. with a bootstrap estimator.

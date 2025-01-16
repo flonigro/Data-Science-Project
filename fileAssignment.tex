@@ -1,0 +1,373 @@
+\section{Foundations of Data Science I Exam}
+\subsection{Assignments on part I and II of the course}
+\subsubsection{Exercise 1: Finite Sample Properties of Ridge Estimator}
+Given a linear model $Y_{i}=X_{i} \beta_{0}+\epsilon_{i}$, with $X_{i} \in \mathbb{R}^{K}$, the ridge estimator is defined as follows
+
+
+\begin{equation}
+\hat{\beta}_{n}^{R}:=\arg \min _{\beta \in \mathbb{R}^{k}}\left\{\frac{1}{2 n}\|\boldsymbol{Y}-\boldsymbol{X} \beta\|_{2}^{2}+\frac{\lambda_{n}}{2}\|\beta\|_{2}^{2}\right\} \label{eq:beta-Hat}
+\end{equation}
+
+
+where $n$ is the number of observations and $\lambda_{n} \in \mathbb{R}_{+}$is a penalty parameter.
+
+\begin{enumerate}
+  \item Monte Carlo simulation of OLS and Ridge estimators: Simulate observations for $\left\{X_{i}, Y_{i}\right\}$ following the linear model with specifications given by $X_{i} \sim N\left(0, I_{K}\right), \epsilon \sim N\left(0, \sigma^{2} I_{n}\right), \sigma^{2}=.5, n=50$, $K=5$ and $\beta_{0}=[0.1, .05,0.2,0.9,0.5]$.
+\end{enumerate}
+
+\begin{itemize}
+  \item For various simulations compute the OLS and Ridge estimators, $\hat{\beta}_{n}^{O L S}$ and $\hat{\beta}_{n}^{R}$, for penalty parameter $\lambda_{n}=0.1 \times n^{1 / 3}$.
+  \item Show that the two estimators satisfy the following relation:
+\end{itemize}
+
+$$
+\hat{\beta}_{n}^{R}=\boldsymbol{W}_{n}\left(\lambda_{n}\right) \hat{\beta}_{n}^{O L S}
+$$
+
+where $\boldsymbol{W}_{n}\left(\lambda_{n}\right)=\left(\boldsymbol{I}_{K}+\lambda_{n} \boldsymbol{Q}_{n}^{-1}\right)^{-1}, \boldsymbol{Q}_{n}=\boldsymbol{X}^{\prime} \boldsymbol{X} / n$ and $\boldsymbol{I}_{K}$ is a $K \times K$ identity matrix.
+
+\begin{itemize}
+  \item Plot the histogram of the OLS and the Ridge estimators in your simulation. What can you observe about the bias and variance of the estimators?
+  \item Show that the Ridge estimator has lower variance than the OLS estimator, i.e.,
+\end{itemize}
+
+$$
+\mathbb{V a r}\left(\hat{\beta}_{n}^{O L S} \mid \boldsymbol{X}\right) \succ \mathbb{V} a r\left(\hat{\beta}_{n}^{R} \mid \boldsymbol{X}\right)
+$$
+
+Hint: This is an inequality between matrices!
+
+\section{Penalty parameter choice by minimizing the mean square error}
+\begin{itemize}
+  \item Define the parameterized mean square error function $F(\alpha):=\mathbb{E}\left[\left\|\hat{\beta}_{n}^{R}-\beta_{0}\right\|_{2}^{2}\right]$, where $\hat{\beta}_{n}^{R}$ is the ridge estimator with penalty parameter $\lambda_{n}=\alpha \times n^{1 / 3}$. Using similar simulation specifications as above produce a plot of the function $F$ for values of $\alpha$ between 0.01 and 0.1.
+  \item Let us now define a new function $G$ as follows:
+\end{itemize}
+
+$$
+G(\alpha):=\mathbb{E}\left[\operatorname{Trace}\left(\boldsymbol{W}_{n}\left(\alpha n^{1 / 3}\right)\left(\frac{\sigma^{2}}{n} \boldsymbol{Q}_{n}^{-1}+\alpha^{2} n^{2 / 3} \boldsymbol{Q}_{n}^{-1} \beta_{0} \beta_{0}{ }^{\prime} \boldsymbol{Q}_{n}^{-1}\right) \boldsymbol{W}_{n}\left(\alpha n^{1 / 3}\right)\right)\right]
+$$
+
+Compute by simulation function $G$, plot it and show that it is equal to the mean square function $F$. Explain your finding using the Ridge estimation theory developed in the course.
+
+\begin{itemize}
+  \item Substitute the parameters $\beta_{0}$ and $\sigma^{2}$ in function $G$ with the OLS estimator $\hat{\beta}_{n}^{O L S}$ and the error variance estimator $\hat{\sigma}_{n}^{2}$, in order to optimize the square error in each simulation by choosing the\\
+optimal penalty parameter. For this purpose, in each simulation compute:
+\end{itemize}
+
+$$
+\hat{\lambda}_{n}^{o p t}=\arg \min _{\lambda \geq 0} \operatorname{Trace}\left(W_{n}(\lambda)\left(\frac{\hat{\sigma}_{n}^{2}}{n} \boldsymbol{Q}_{n}^{-1}+\lambda^{2} \boldsymbol{Q}_{n}^{-1} \hat{\beta}_{n}^{O L S} \hat{\beta}_{n}^{O L S^{\prime}} \boldsymbol{Q}_{n}^{-1}\right) W_{n}(\lambda)\right)
+$$
+
+where
+
+$$
+\hat{\sigma}_{n}^{2}=\frac{\left\|\boldsymbol{Y}-\boldsymbol{X} \hat{\beta}_{n}^{O L S}\right\|_{2}^{2}}{n-K}
+$$
+
+Using such optimal penalty parameter compute the Ridge estimator and show that it delivers a mean square error similar to the minimum of functions $F$ and $G$.
+
+\subsection{Exercise 2: Nonlinear regression with measurement errors}
+A researcher considers the (nonlinear) regression model:
+
+$$
+y_{i}=h\left(x_{i}^{*}, \beta_{0}\right)+\varepsilon_{i},
+$$
+
+where $\beta_{0}$ is a scalar parameter and $h$ is a given function (specified below). The explanatory variable is observed with a measurement error:
+
+$$
+x_{i}=x_{i}^{*}+u_{i}
+$$
+
+The available data for the researcher are $\left(y_{i}, x_{i}\right), i=1, \cdots, n$. Moreover, we assume:
+
+$$
+\left(x_{i}^{*}, \varepsilon_{i}, u_{i}\right)^{\prime} \sim \operatorname{IIN}\left[\left(\begin{array}{l}
+0 \\
+0 \\
+0
+\end{array}\right),\left(\begin{array}{ccc}
+\sigma_{x^{*}}^{2} & 0 & 0 \\
+0 & \sigma_{\epsilon}^{2} & 0 \\
+0 & 0 & \sigma_{u}^{2}
+\end{array}\right)\right]
+$$
+
+\section{Misspecified estimation}
+Suppose first that the researcher neglects the measurement errors. We want to study the consequences of this choice. To simplify, let us assume in this part of the exercise that $h\left(x_{i}^{*}, \beta_{0}\right)=x_{i}^{*} \beta_{0}$, that is, the regression model is linear. The researcher proposes the estimator:
+
+$$
+\hat{\beta}=\arg \min _{\beta} \sum_{i=1}^{n}\left(y_{i}-x_{i} \beta\right)^{2}
+$$
+
+\begin{itemize}
+  \item Compute:
+\end{itemize}
+
+$$
+\beta_{0}^{*}=\arg \min _{\beta} E_{0}\left[\left(y_{i}-x_{i} \beta\right)^{2}\right]
+$$
+
+where $E_{0}[\cdot]$ denotes expectation w.r.t. the true distribution of the data. Is the estimator $\hat{\beta}$ consistent for $\beta_{0}$ ?
+
+\begin{itemize}
+  \item Derive the asymptotic distribution of the M-estimator $\hat{\beta}$.
+\end{itemize}
+
+\section{NLS estimation}
+Suppose now that the researcher properly accounts for measurement errors. Let us assume that $h\left(x_{i}^{*}, \beta_{0}\right)=\left(x_{i}^{*}+\beta_{0}\right)^{2}$.
+
+\begin{itemize}
+  \item Show that:
+\end{itemize}
+
+$$
+E_{0}\left[y_{i} \mid x_{i}\right]=\left(x_{i}+\beta_{0}\right)^{2}+\sigma_{u}^{2}
+$$
+
+\begin{itemize}
+  \item Propose a consistent NLS estimator of $\beta_{0}$, called $\hat{\beta}_{N L S}$. Derive the asymptotic distribution of $\hat{\beta}_{N L S}$.
+\end{itemize}
+
+\subsection*{1.3 Exercise 3: PML estimation in a duration model}
+The positive variables (durations) $y_{i}$ are generated by the model
+
+$$
+y_{i}=\left(\beta_{0} x_{i}\right) \varepsilon_{i}, \quad i=1, \ldots, n,
+$$
+
+where:
+
+\begin{itemize}
+  \item regressors $x_{i}$ and errors $\varepsilon_{i}$ are positive and such that $\left(x_{i}, \varepsilon_{i}\right) \sim i . i . d$, where $x_{i}$ and $\varepsilon_{i}$ are independent with
+\end{itemize}
+
+$$
+E\left[\varepsilon_{i}\right]=1
+$$
+
+\begin{itemize}
+  \item $\beta_{0}>0$ is an unknown scalar parameter.
+\end{itemize}
+
+In this exercise, we consider different pseudo-models for a PML estimation of $\beta$.
+
+\begin{enumerate}
+  \item Conditional expectation
+\end{enumerate}
+
+\begin{itemize}
+  \item Prove that
+\end{itemize}
+
+$$
+E_{0}\left[y_{i} \mid x_{i}\right]=\beta_{0} x_{i}
+$$
+
+where $E_{0}$ [.] denotes expectation under the true model.\\
+2. PML with exponential density
+
+\begin{itemize}
+  \item The econometrician considers the following parametric family of pseudodensities
+\end{itemize}
+
+
+\begin{equation*}
+f(y \mid x ; \beta)=\frac{1}{\beta x} e^{-\frac{y}{\beta x}}, \quad y \geq 0 \tag{2}
+\end{equation*}
+
+
+with parameter $\beta>0$.
+
+\begin{itemize}
+  \item Compute the pseudo-true value defined by
+\end{itemize}
+
+$$
+\beta_{0}^{*}=\arg \max _{\beta} E_{0}\left[\log f\left(y_{i} \mid x_{i} ; \beta\right)\right]
+$$
+
+and show that $\beta_{0}^{*}=\beta_{0}$.
+
+\begin{itemize}
+  \item Is this result surprising? Explain it using the general PML theory derived in the course!
+  \item Compute the PML estimator of $\beta$ based on family (2):
+\end{itemize}
+
+$$
+\hat{\beta}=\arg \max _{\beta} \sum_{i=1}^{n} \log f\left(y_{i} \mid x_{i} ; \beta\right)
+$$
+
+and show that
+
+$$
+\hat{\beta}=\frac{1}{n} \sum_{i=1}^{n} \frac{y_{i}}{x_{i}} .
+$$
+
+Is estimator $\hat{\beta}$ consistent? Give its asymptotic distribution.\\
+3. PML with Weibull density
+
+\begin{itemize}
+  \item Let us now consider the density function on $\mathbb{R}_{+}$:
+\end{itemize}
+
+$$
+g(\varepsilon)=\frac{2 \varepsilon}{c} e^{-\frac{\varepsilon^{2}}{c}}, \quad \varepsilon \geq 0
+$$
+
+where $c:=4 / \pi$. It is possible to show (you don't have to show this!) that $\int_{0}^{\infty} g(\varepsilon) d \varepsilon=1$ and $\int_{0}^{\infty} \varepsilon g(\varepsilon) d \varepsilon=1$.
+
+\begin{itemize}
+  \item Explain why
+\end{itemize}
+
+
+\begin{equation}
+\tilde{f}(y \mid x ; \beta)=\frac{2 y}{c(\beta x)^{2}} e^{-\frac{1}{c}\left(\frac{y}{\beta x}\right)^{2}}, \quad y \geq 0, \label{eq:tilde}
+\end{equation}
+
+
+with $\beta>0$, defines a parametric family of conditional densities with correctly specified mean for our problem.
+
+\begin{itemize}
+  \item The PML estimator of $\beta$ based on family (3) is
+\end{itemize}
+
+$$
+\tilde{\beta}=\arg \max _{\beta} \sum_{i} \log \tilde{f}\left(y_{i} \mid x_{i} ; \beta\right) .
+$$
+
+Is $\tilde{\beta}$ a consistent PML estimator for estimating $\beta_{0}$ ? Explain your answer using the general PML theory derived in the course.
+
+\section{Assignments on part III of the course}
+\subsection{Exercise 1: Jackknife}
+The aim of this project is to estimate the variance-covariance matrix of the OLSE of the parameters in linear regression by the jackknife method. Let's assume the linear model
+
+$$
+y_{i}=\mathbf{x}_{i}^{\prime} \boldsymbol{\beta}+\epsilon_{i}, \quad i=1, \ldots, n
+$$
+
+where $\boldsymbol{\beta}=\left(\beta_{1}, \ldots, \beta_{p}\right)^{\prime}, \mathbf{x}_{i}^{\prime}=\left(x_{i 1}, \ldots, x_{i p}\right)$ and $\epsilon_{i}$ are independent identically distributed random variables with some distribution $F$ such that $E\left(\epsilon_{i}\right)=0$. In matrix notation the model can be written as
+
+$$
+\begin{aligned}
+\mathbf{y} & =\mathbf{X} \boldsymbol{\beta}+\boldsymbol{\epsilon}, \\
+\text { where } \quad \mathbf{y} & =\left(y_{1}, \ldots, y_{n}\right)^{\prime}, \\
+\boldsymbol{\epsilon} & =\left(\epsilon_{1}, \ldots, \epsilon_{n}\right)^{\prime}, \\
+\mathbf{X} & =\left(\begin{array}{c}
+\mathbf{x}_{1}^{\prime} \\
+\vdots \\
+\mathbf{x}_{n}^{\prime}
+\end{array}\right) \in \mathbb{R}^{n \times p} .
+\end{aligned}
+$$
+
+Let $\hat{\boldsymbol{\beta}}$ be the OLSE of $\boldsymbol{\beta}$ and let $\hat{\epsilon}_{i}=y_{i}-\mathbf{x}_{i}^{\prime} \hat{\boldsymbol{\beta}}$ be the $i$ th residual.
+
+\begin{enumerate}
+  \item Show that
+\end{enumerate}
+
+$$
+\hat{\boldsymbol{\beta}}_{(i)}=\hat{\boldsymbol{\beta}}-\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i} \hat{\epsilon}_{i}^{m}
+$$
+
+using the equalities
+
+$$
+\begin{aligned}
+\mathbf{X}_{(i)}^{\prime} \mathbf{y}_{(i)} & =\mathbf{X}^{\prime} \mathbf{y}-\mathbf{x}_{i} y_{i} \\
+\left(\mathbf{X}_{(i)}^{\prime} \mathbf{X}_{(i)}\right)^{-1} & =\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}+\frac{\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i} \mathbf{x}_{i}^{\prime}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}}{1-m_{i i}}
+\end{aligned}
+$$
+
+where $m_{i i}=\mathbf{x}_{i}^{\prime}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{x}_{i}$ is the $i t h$ diagonal element of the projection matrix $\mathbf{M}=\mathbf{X}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1} \mathbf{X}^{\prime}$ and $\hat{\epsilon}_{i}^{m}=\frac{\hat{\epsilon}_{i}}{1-m_{i i}}$.\\
+2. Give the interpretation of the difference $\hat{\boldsymbol{\beta}}_{(i)}-\hat{\boldsymbol{\beta}}$.\\
+3. Show that the jackknife estimator of the variance-covariance matrix of (the random vector) $\hat{\boldsymbol{\beta}}$ is given by
+
+$$
+\begin{aligned}
+\hat{V}_{J a c k}(\hat{\boldsymbol{\beta}}) & =\frac{1}{n(n-1)} \sum_{i=1}^{n}\left(\hat{\boldsymbol{\beta}}^{* i}-\hat{\boldsymbol{\beta}}^{* \cdot}\right)\left(\hat{\boldsymbol{\beta}}^{* i}-\hat{\boldsymbol{\beta}}^{* \cdot}\right)^{\prime} \\
+& =\frac{n-1}{n}\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}\left[\sum_{i=1}^{n} \mathbf{x}_{i} \mathbf{x}_{i}^{\prime}\left(\hat{\epsilon}_{i}^{m}\right)^{2}-\frac{1}{n}\left(\sum_{i=1}^{n} \mathbf{x}_{i} \hat{\epsilon}_{i}^{m}\right)\left(\sum_{i=1}^{n} \mathbf{x}_{i}^{\prime} \hat{\epsilon}_{i}^{m}\right)\right]\left(\mathbf{X}^{\prime} \mathbf{X}\right)^{-1}
+\end{aligned}
+$$
+
+where the $\hat{\boldsymbol{\beta}}^{* i}$ are the pseudo-values and $\hat{\boldsymbol{\beta}}^{*}$ their mean.\\
+4. Consider an approximation of the jackknife estimator obtained at point 3 . by replacing $1-m_{i i}$ by 1 . When is this approximation justified? (Compute the average value of the $m_{i i}$, i.e. $\frac{1}{n} \sum_{i=1}^{n} m_{i i}$.)\\
+5. Give the formula of jackknife estimator of point 3. obtained by replacing $1-m_{i i}$ by 1 and verify that this estimator is the estimator proposed by H. White (1980), A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity, Econometrica, pp. 817-838. Give the exact location in that paper where we find this estimator.\\
+6. Read p. 817,820 (first half), and p. 821 (first half) of the cited article and summarize in at most one page the problem and the proposed solution.\\
+7. Compare the jacknife estimator derived at point 3. with a bootstrap estimator.
+
+\subsection{Exercise 2: Wild bootstrap}
+The aim of this project is to implement the so-called "wild bootstrap" procedure to assess the uncertainty of OLS estimates of a linear model, and compare it with the uncertainty assessments of "paired bootstrap" and "residual bootstrap" procedures. Data containing information on medical expenses (E), standardized income (I) and smoking habit (S, taking value 1 for a smoker and 0 for a non smoker) can be found in the file "medical.csv" located in the exam folder. Create and precisely document a Python code performing in sequence the following tasks:
+
+\begin{enumerate}
+  \item Read the csv file into your Python code. Obtain basic informations on the data types of each variable, the number of observations, the number of missing values.\\
+(Hint: functions from the Pandas library can ease this task.)
+  \item Compute summary statistics of each variable, visualize their correlation matrix and plot their histogram and pairwise scatter plots.
+  \item Create a function computing the OLS estimates, $R^{2}$ and residuals of linear regression model
+\end{enumerate}
+
+
+\begin{equation}
+E_{i}=a+b I_{i}+c S_{i}+\varepsilon_{i}, \quad i=1, \ldots, n \label{eq:Ei}
+\end{equation}
+
+
+and obtain these estimates.\\
+4. Produce the pairwise scatter plots of the residuals versus the explanatory variables. What do you notice?\\
+(Hint: do you notice any heteroskedasticity with respect to a specific explanatory variable?)\\
+5. Define three functions computing the bootstrap estimates of the model coefficients and $R^{2}$ for the paired bootstrap, the residual bootstrap and the wild bootstrap procedures according to the algorithms reported below. ${ }^{1}$\\
+6. Compute the bootstrap estimates of the coefficients and the $R^{2}$ of model (4) for these three bootstrap schemes. Visualize and compare the histograms of the bootstrap distributions of the coefficients and the $R^{2}$. What do you notice?\\
+(Hint: The histograms of the wild bootstrap distributions resemble the ones of the paired bootstrap or the ones of the residual bootstrap?)\\
+7. Compute and visualize the confidence intervals for the model coefficients $a, b$ and $c$ based on the three bootstrap schemes. Which one/ones would you trust and why?
+
+\begin{verbatim}
+Algorithm 1 Paired bootstrap
+    set the random number generation seed and B (the number of bootstrap samples)
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\left(E_{i}^{*}, I_{i}^{*}, S_{i}^{*}\right)\right\}$ of size $n$ drawing with replacement from $\left\{\left(E_{i}, I_{i}, S_{i}\right)\right\}$
+        compute the OLS estimates of the model coefficients and the $R^{2}$ for this bootstrap sample
+    end for
+    return all bootstrap coefficients and $R^{2}$ estimates
+\end{verbatim}
+
+\begin{verbatim}
+Algorithm 2 Residual bootstrap
+    set the random number generation seed and B
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\hat{\varepsilon}_{i}^{*}\right\}$ of size $n$ drawing with replacement from $\left\{\hat{\varepsilon}_{i}\right\}$, the estimated residuals
+        compute the OLS estimates of the coefficients and the $R^{2}$ for the model
+            $E_{i}^{*}=a+b I_{i}+c S_{i}+\hat{\varepsilon}_{i}^{*}, \quad i=1, \ldots, n$
+    end for
+    return all bootstrap coefficients and $R^{2}$ estimates
+\end{verbatim}
+
+\footnotetext{${ }^{1}$ The residual bootstrap assumes that $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]=a+b I_{i}+c S_{i}$ and that the error terms $\varepsilon_{i}$ are IID and homoskedastic. The paired bootstrap only assumes that there exists a joint probability distribution of $\left\{\left(E_{i}, I_{i}, S_{i}\right)\right\}$ and it makes no assumptions about the properties of the error terms $\varepsilon_{i}$ or about the functional form of $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]$. The wild bootstrap lies in between these two bootstrap schemes, as it assumes that $\mathbb{E}\left[E_{i} \mid I_{i}, S_{i}\right]=a+b I_{i}+c S_{i}$, but it allows for heteroskedasticity by conditioning on the (transformed) residuals.
+}\begin{verbatim}
+Algorithm 3 Wild bootstrap
+    set the random number generation seed and $B$
+    for $b=1, \ldots, B$ do
+        create a sample $\left\{\hat{\varepsilon}_{i}^{*}\right\}$ of size $n$ where $\hat{\varepsilon}_{i}^{*}=f\left(\hat{\varepsilon}_{i}\right) v_{i}$ with
+$$
+f\left(\hat{\varepsilon}_{i}\right)=\sqrt{n /(n-K)} \hat{\varepsilon}_{i},
+$$
+\end{verbatim}
+
+$K$ being the number of coefficients, and
+
+$$
+v_{i}= \begin{cases}1 & \text { with probability } 1 / 2 \\ -1 & \text { with probability } 1 / 2\end{cases}
+$$
+
+4: compute the OLS estimates of the coefficients and the $R^{2}$ for the model
+
+$$
+E_{i}^{*}=a+b I_{i}+c S_{i}+\hat{\varepsilon}_{i}^{*}, \quad i=1, \ldots, n
+$$
+
+\section{end for}
+return all bootstrap coefficients and $R^{2}$ estimates
+
+
+\end{document}
